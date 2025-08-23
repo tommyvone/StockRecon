@@ -1,0 +1,100 @@
+Skip to content
+Chats
+Archived
+New Chat
+just now
+New chat with Assistant
+Assistant answers questions, refines code, and makes precise edits.
+Assistant mode
+
+advanced
+Claude 4.0 Sonnet
+
+Ask Assistant, use @ to include specific files...
+from flask import Flask, render_template, request
+
+app = Flask('app')
+
+@app.route('/')
+def hello_world():
+    print(request.headers)
+    return render_template(
+        'index.html',
+        user_id=request.headers['X-Replit-User-Id'],
+        user_name=request.headers['X-Replit-User-Name'],
+        user_roles=request.headers['X-Replit-User-Roles'],
+        user_bio=request.headers['X-Replit-User-Bio'],
+        user_profile_image=request.headers['X-Replit-User-Profile-Image'],
+        user_teams=request.headers['X-Replit-User-Teams'],
+        user_url=request.headers['X-Replit-User-Url']
+    )
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)
+
+
+StockRecon - Replit
+Pasted-Plan-Your-App-Define-the-purpose-a-stock-picker-that-helps-users-choose-a-trade-based-on-global-mar-1755914799661_1755914799662.txt
+Plan Your App
+Define the purpose: a stock picker that helps users choose a trade based on global market trends.
+
+Sketch the layout: homepage with a dropdown menu, a “Why Trade?” section, and a refresh button.
+
+2. Set Up Your Project Structure
+Create folders:
+
+templates/ for HTML files
+
+static/ for CSS and JavaScript
+
+Main Python file (e.g., app.py) for backend logic
+
+3. Build the Flask Backend
+Use Flask to:
+
+Serve the homepage
+
+Randomly select a list of stocks
+
+Pass stock data to the frontend
+
+4. Design the Frontend
+Create an HTML page with:
+
+A dropdown menu of randomly selected stocks
+
+A section that displays the stock’s description and reason to trade
+
+A button to reshuffle the stock list
+
+5. Add the Stock Picker Dropdown
+Populate the dropdown with stocks like:
+
+Stock Title	Description	Why Trade It Now
+NVIDIA (NVDA)	GPU leader powering AI, gaming, and data centers	AI demand is surging globally; NVIDIA dominates the space
+TSMC (TSM)	World's largest semiconductor foundry	Global chip shortages and rising demand make TSMC essential
+NextEra Energy (NEE)	U.S. clean energy giant in wind and solar	Governments worldwide are investing in renewable infrastructure
+ASML Holding (ASML)	Dutch firm producing advanced chip-making machines	Critical supplier for next-gen semiconductors amid global tech race
+Alphabet (GOOGL)	Parent of Google, strong in cloud, ads, and AI	Digital ad recovery and AI integration are boosting global revenue
+Shopify (SHOP)	E-commerce platform for global merchants	Online retail continues to grow, especially in emerging markets
+Reliance Industries (RELIANCE.NS)	Indian conglomerate in telecom, retail, and energy	India’s digital and economic expansion makes it a strategic play
+MercadoLibre (MELI)	Latin America’s top e-commerce and fintech platform	Rising internet access and digital payments adoption in the region
+Airbus (AIR.PA)	European aerospace leader	Post-COVID travel rebound and airline fleet upgrades drive demand
+CrowdStrike (CRWD)	Cybersecurity firm protecting global enterprises	Cyber threats are rising; companies are increasing security budgets
+6. Make It Interactive
+Use JavaScript to:
+
+Detect dropdown selection
+
+Display the corresponding description and reason
+
+Refresh the dropdown with new random picks
+
+7. Style with CSS
+Make the app visually appealing:
+
+Clean layout
+
+Responsive design
+
+Highlight selected stock info
