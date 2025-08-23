@@ -39,6 +39,115 @@
             font-size: 1.2rem;
         }
 
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dropdown {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #333;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .refresh-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .refresh-btn:hover {
+            background: linear-gradient(135deg, #00a085, #008f75);
+            transform: scale(1.05);
+        }
+
+        .selected-stock {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+
+        .selected-stock.active {
+            display: block;
+        }
+
+        .selected-stock h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .selected-stock h2 a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .selected-stock h2 a:hover {
+            color: #e74c3c;
+        }
+
+        .selected-stock .description {
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .why-trade {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-left: 4px solid #00b894;
+            margin-bottom: 20px;
+        }
+
+        .why-trade strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .trade-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .trade-button:hover {
+            background: linear-gradient(135deg, #00a085, #008f75);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+        }
+
         .stock-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -85,7 +194,7 @@
             line-height: 1.5;
         }
 
-        .why-trade {
+        .why-trade-card {
             background: linear-gradient(135deg, #74b9ff, #0984e3);
             color: white;
             padding: 15px;
@@ -93,31 +202,20 @@
             font-size: 0.95rem;
             line-height: 1.4;
             border-left: 4px solid #00b894;
+            margin-bottom: 15px;
         }
 
-        .why-trade strong {
+        .why-trade-card strong {
             display: block;
             margin-bottom: 5px;
             font-size: 1rem;
         }
 
-        .trade-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #00b894, #00a085);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            font-weight: bold;
+        .loading {
             text-align: center;
-        }
-
-        .trade-button:hover {
-            background: linear-gradient(135deg, #00a085, #008f75);
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+            color: white;
+            font-size: 1.2rem;
+            margin: 20px 0;
         }
 
         @media (max-width: 768px) {
@@ -132,6 +230,15 @@
             .stock-card {
                 padding: 20px;
             }
+
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .dropdown, .refresh-btn {
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -139,6 +246,28 @@
     <div class="container">
         <h1>🚀 Global Stock Picker</h1>
         <p class="subtitle">Top stock picks with direct trading platform access</p>
+        
+        <div class="controls">
+            <select class="dropdown" id="stockDropdown">
+                <option value="">Select a stock to analyze...</option>
+                {% for stock in stocks %}
+                <option value="{{ loop.index0 }}">{{ stock.title }}</option>
+                {% endfor %}
+            </select>
+            <button class="refresh-btn" onclick="refreshStocks()">🔄 Refresh Picks</button>
+        </div>
+
+        <div class="selected-stock" id="selectedStock">
+            <h2><a href="#" target="_blank" rel="noopener noreferrer" id="stockLink"></a></h2>
+            <div class="description" id="stockDescription"></div>
+            <div class="why-trade">
+                <strong>Why Trade It Now:</strong>
+                <span id="whyTrade"></span>
+            </div>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="trade-button" id="tradeButton">
+                📈 Start Trading
+            </a>
+        </div>
         
         <div class="stock-grid">
             {% for stock in stocks %}
@@ -149,7 +278,7 @@
                     </a>
                 </h2>
                 <p class="stock-description">{{ stock.description }}</p>
-                <div class="why-trade">
+                <div class="why-trade-card">
                     <strong>Why Trade It Now:</strong>
                     {{ stock.why_trade }}
                 </div>
@@ -160,5 +289,101 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        let currentStocks = {{ stocks | tojson }};
+
+        // Handle dropdown selection
+        document.getElementById('stockDropdown').addEventListener('change', function() {
+            const selectedIndex = this.value;
+            const selectedStockDiv = document.getElementById('selectedStock');
+            
+            if (selectedIndex === '') {
+                selectedStockDiv.classList.remove('active');
+                return;
+            }
+            
+            const stock = currentStocks[parseInt(selectedIndex)];
+            
+            // Update selected stock display
+            document.getElementById('stockLink').textContent = stock.title;
+            document.getElementById('stockLink').href = stock.trade_url;
+            document.getElementById('stockDescription').textContent = stock.description;
+            document.getElementById('whyTrade').textContent = stock.why_trade;
+            document.getElementById('tradeButton').href = stock.trade_url;
+            
+            selectedStockDiv.classList.add('active');
+        });
+
+        // Refresh stocks function
+        async function refreshStocks() {
+            const refreshBtn = document.querySelector('.refresh-btn');
+            const dropdown = document.getElementById('stockDropdown');
+            const selectedStock = document.getElementById('selectedStock');
+            
+            // Show loading state
+            refreshBtn.textContent = '🔄 Loading...';
+            refreshBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/refresh');
+                const newStocks = await response.json();
+                
+                // Update current stocks
+                currentStocks = newStocks;
+                
+                // Clear dropdown
+                dropdown.innerHTML = '<option value="">Select a stock to analyze...</option>';
+                
+                // Add new options
+                newStocks.forEach((stock, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = stock.title;
+                    dropdown.appendChild(option);
+                });
+                
+                // Hide selected stock
+                selectedStock.classList.remove('active');
+                dropdown.value = '';
+                
+                // Update stock grid
+                updateStockGrid(newStocks);
+                
+            } catch (error) {
+                console.error('Error refreshing stocks:', error);
+            } finally {
+                // Reset button state
+                refreshBtn.textContent = '🔄 Refresh Picks';
+                refreshBtn.disabled = false;
+            }
+        }
+
+        function updateStockGrid(stocks) {
+            const stockGrid = document.querySelector('.stock-grid');
+            stockGrid.innerHTML = '';
+            
+            stocks.forEach(stock => {
+                const stockCard = document.createElement('div');
+                stockCard.className = 'stock-card';
+                stockCard.innerHTML = `
+                    <h2 class="stock-title">
+                        <a href="${stock.trade_url}" target="_blank" rel="noopener noreferrer">
+                            ${stock.title}
+                        </a>
+                    </h2>
+                    <p class="stock-description">${stock.description}</p>
+                    <div class="why-trade-card">
+                        <strong>Why Trade It Now:</strong>
+                        ${stock.why_trade}
+                    </div>
+                    <a href="${stock.trade_url}" target="_blank" rel="noopener noreferrer" class="trade-button">
+                        📈 Start Trading
+                    </a>
+                `;
+                stockGrid.appendChild(stockCard);
+            });
+        }
+    </script>
 </body>
 </html>
