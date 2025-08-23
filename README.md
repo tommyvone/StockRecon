@@ -1,5 +1,5 @@
 
-# 🚀 Global Stock Picker
+# 🚀 Global Stock Picker By StockRecon
 
 A Flask web application that helps users discover trending stocks from global markets with direct trading platform access.
 
