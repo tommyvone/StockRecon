@@ -66,6 +66,13 @@ STOCKS = [
         "why_trade": "Cyber threats are rising; companies are increasing security budgets",
         "trade_url": "https://finance.yahoo.com/quote/CRWD"
     }
+    {
+      "title": "Tesla (TSLA)",
+      "description": "Innovative electric vehicle and clean energy company",
+      "why_trade": "Global shift toward sustainable transportation and energy; strong brand and technology leadership",
+      "trade_url": "https://finance.yahoo.com/quote/TSLA"
+    }
+
 ]
 
 def get_random_stocks(count=5):
